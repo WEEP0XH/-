@@ -15,7 +15,7 @@
       <img src="assets/app-icon.png" alt="护眼提醒图标">
       <span>护眼提醒</span>
     </a>
-    <a class="header-download" href="downloads/EyeCareReminder-v0.4.0.exe" download>下载 Windows 版</a>
+    <a class="header-download" href="downloads/EyeCareReminder-v0.4.0.exe" download data-release>下载 Windows 版</a>
   </header>
 
   <main id="top">
@@ -25,7 +25,7 @@
         <h1>适时休息一下，<br><span>让眼睛轻松一点。</span></h1>
         <p class="lead">按你设定的时间主动提醒，询问后再播放眼保健操音频。关闭窗口也会安静留在系统托盘，不打扰正在做的事。</p>
         <div class="hero-actions">
-          <a class="primary-button" href="downloads/EyeCareReminder-v0.4.0.exe" download>
+          <a class="primary-button" href="downloads/EyeCareReminder-v0.4.0.exe" download data-release>
             <span>下载 Windows 版</span>
             <small>v0.4.0 · 已含音频 · 无需安装</small>
           </a>
@@ -74,7 +74,7 @@
         <img src="assets/app-icon.png" alt="护眼提醒图标">
         <h3>护眼提醒 v0.4.0</h3>
         <p>Windows 10 / 11 · 64 位</p>
-        <a class="primary-button compact" href="downloads/EyeCareReminder-v0.4.0.exe" download>立即下载</a>
+        <a class="primary-button compact" href="downloads/EyeCareReminder-v0.4.0.exe" download data-release>立即下载</a>
         <dl>
           <div><dt>文件</dt><dd>EyeCareReminder-v0.4.0.exe</dd></div>
           <div><dt>大小</dt><dd id="file-size">24.0 MB</dd></div>
@@ -92,7 +92,48 @@
   <footer>
     <div class="brand footer-brand"><img src="assets/app-icon.png" alt=""><span>护眼提醒</span></div>
     <p>给专注留一点空间，也给眼睛留一点休息。</p>
-    <a href="downloads/EyeCareReminder-v0.4.0.exe" download>下载 v0.4.0</a>
+    <a href="downloads/EyeCareReminder-v0.4.0.exe" download data-release>下载 v0.4.0</a>
   </footer>
+
+  <script>
+  /*
+   * 下载地址自动指向 GitHub Releases。
+   * 页面部署在 https://<用户名>.github.io/<仓库名>/ 时，会根据当前网址自动推导，
+   * 不需要手工改这里的任何东西；只有用自定义域名时才需要填 owner / repo。
+   */
+  (function () {
+    var CONFIG = {
+      owner: '',                                  // 例如 'zhangsan'，留空则自动推导
+      repo: '',                                   // 例如 'eyecare-reminder'，留空则自动推导
+      tag: 'v0.4.0',                              // 必须与 Release 的标签完全一致
+      asset: 'EyeCareReminder-v0.4.0.exe',        // 必须与 Release 里上传的文件名完全一致
+      fallback: 'downloads/EyeCareReminder-v0.4.0.exe'  // 推导失败时的本地相对路径
+    };
+
+    function resolveRepo() {
+      var owner = CONFIG.owner;
+      var repo = CONFIG.repo;
+      if (owner && repo) return { owner: owner, repo: repo };
+
+      var host = location.hostname;
+      if (!/\.github\.io$/i.test(host)) return null;
+
+      var user = host.replace(/\.github\.io$/i, '');
+      var parts = location.pathname.split('/').filter(Boolean);
+      var name = parts.length ? parts[0] : user + '.github.io';
+      return { owner: user, repo: name };
+    }
+
+    var target = resolveRepo();
+    var url = target
+      ? 'https://github.com/' + target.owner + '/' + target.repo + '/releases/download/' + CONFIG.tag + '/' + CONFIG.asset
+      : CONFIG.fallback;
+
+    var links = document.querySelectorAll('a[data-release]');
+    for (var i = 0; i < links.length; i++) {
+      links[i].setAttribute('href', url);
+    }
+  })();
+  </script>
 </body>
 </html>
